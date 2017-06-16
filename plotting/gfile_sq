@@ -1,0 +1,4 @@
+set xrange -50.0 1500.0
+set yrange -50.0 1500.0
+loadcolormap net_color_redblue.map
+cmovie
