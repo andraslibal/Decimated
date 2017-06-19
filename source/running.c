@@ -1015,6 +1015,8 @@ fprintf(global_parameters.statistics_file,"%lf %lf",
 //Q3 and Q4 for the decimated lattice project
 
 
+
+
 fprintf(global_parameters.statistics_file,"\n");
 
 
