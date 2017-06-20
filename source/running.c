@@ -812,6 +812,13 @@ for(i=0;i<7;i++)
 	global_statistics.N_vertextype3[i] = 0;
     }
 
+//topological charge on the neighbors
+global_statistics.q33 = 0;
+global_statistics.q34 = 0;
+global_statistics.q43 = 0;
+global_statistics.q44 = 0;
+
+
 global_statistics.total_energy = 0;
 }
 
@@ -820,7 +827,10 @@ void calculate_statistics_per_step()
 ============================================================================================== */
 void calculate_statistics_per_step()
 {
-int i;
+int i,j;
+int i_neighbor;
+int q_neighbor;
+int z_neighbor;
 
 recalculate_vertex_types();
 for(i=0;i<global_variables.N_vertices;i++)
@@ -833,6 +843,25 @@ for(i=0;i<global_variables.N_vertices;i++)
 
 for(i=0;i<global_variables.N_particles;i++)
     global_statistics.total_energy += global_variables.particles[i].E;
+
+
+//add the charge together
+for(i=0;i<global_variables.N_vertices;i++)
+	{
+	//go over all the neighboring vertices
+	for(j=0;j<global_variables.vertices[i].N_neighbor_vertices;j++)
+		{
+		i_neighbor = global_variables.vertices[i].neighbor_vertex_ID[j];
+		q_neighbor = global_variables.vertices[i_neighbor].q;
+		z_neighbor = global_variables.vertices[i_neighbor].z;
+		//add the charge on them to the appropriate total
+		if ((z_neighbor==3)&&(global_variables.vertices[i].z==3)) global_statistics.q33 += q_neighbor;
+		else if ((z_neighbor==4)&&(global_variables.vertices[i].z==3)) global_statistics.q43 += q_neighbor;
+		else if ((z_neighbor==3)&&(global_variables.vertices[i].z==4)) global_statistics.q34 += q_neighbor;
+		else if ((z_neighbor==4)&&(global_variables.vertices[i].z==4)) global_statistics.q44 += q_neighbor;
+		}
+	}
+
 
 global_statistics.N_average++;
 }
@@ -1014,7 +1043,11 @@ fprintf(global_parameters.statistics_file,"%lf %lf",
 
 //Q3 and Q4 for the decimated lattice project
 
-
+fprintf(global_parameters.statistics_file," %lf %lf %lf %lf",
+	global_statistics.q33/(double)global_statistics.N_average,
+	global_statistics.q43/(double)global_statistics.N_average,
+	global_statistics.q34/(double)global_statistics.N_average,
+	global_statistics.q44/(double)global_statistics.N_average);
 
 
 fprintf(global_parameters.statistics_file,"\n");
