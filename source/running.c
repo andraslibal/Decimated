@@ -818,6 +818,8 @@ global_statistics.q34 = 0;
 global_statistics.q43 = 0;
 global_statistics.q44 = 0;
 
+global_statistics.N3_charged = 0;
+global_statistics.N4_charged = 0;
 
 global_statistics.total_energy = 0;
 }
@@ -845,23 +847,33 @@ for(i=0;i<global_variables.N_particles;i++)
     global_statistics.total_energy += global_variables.particles[i].E;
 
 
-//add the charge together
+//add the charge together for all vertices
 for(i=0;i<global_variables.N_vertices;i++)
 	{
-	//go over all the neighboring vertices
-	for(j=0;j<global_variables.vertices[i].N_neighbor_vertices;j++)
+
+	//only calculate screening for vertices that have a charge
+	if (global_variables.vertices[i].q!=0)
 		{
-		i_neighbor = global_variables.vertices[i].neighbor_vertex_ID[j];
-		q_neighbor = global_variables.vertices[i_neighbor].q;
-		z_neighbor = global_variables.vertices[i_neighbor].z;
-		//add the charge on them to the appropriate total
-		if ((z_neighbor==3)&&(global_variables.vertices[i].z==3)) global_statistics.q33 += q_neighbor;
-		else if ((z_neighbor==4)&&(global_variables.vertices[i].z==3)) global_statistics.q43 += q_neighbor;
-		else if ((z_neighbor==3)&&(global_variables.vertices[i].z==4)) global_statistics.q34 += q_neighbor;
-		else if ((z_neighbor==4)&&(global_variables.vertices[i].z==4)) global_statistics.q44 += q_neighbor;
+		
+		//counting the number that is charged
+		//this will replace N_average for these quantities
+		if (global_variables.vertices[i].z==3) global_statistics.N3_charged++;
+		if (global_variables.vertices[i].z==4) global_statistics.N4_charged++;
+
+		//go over all the neighboring vertices
+		for(j=0;j<global_variables.vertices[i].N_neighbor_vertices;j++)
+			{
+			i_neighbor = global_variables.vertices[i].neighbor_vertex_ID[j];
+			q_neighbor = global_variables.vertices[i_neighbor].q;
+			z_neighbor = global_variables.vertices[i_neighbor].z;
+			//add the charge on them to the appropriate total
+			if ((z_neighbor==3)&&(global_variables.vertices[i].z==3)) global_statistics.q33 += q_neighbor;
+			else if ((z_neighbor==4)&&(global_variables.vertices[i].z==3)) global_statistics.q43 += q_neighbor;
+			else if ((z_neighbor==3)&&(global_variables.vertices[i].z==4)) global_statistics.q34 += q_neighbor;
+			else if ((z_neighbor==4)&&(global_variables.vertices[i].z==4)) global_statistics.q44 += q_neighbor;
+			}
 		}
 	}
-
 
 global_statistics.N_average++;
 }
@@ -1043,11 +1055,15 @@ fprintf(global_parameters.statistics_file,"%lf %lf",
 
 //Q3 and Q4 for the decimated lattice project
 
+fprintf(global_parameters.statistics_file," %lf %lf",
+	global_statistics.N3_charged/(double)global_statistics.N_average/(double)global_variables.N_vertices3,
+	global_statistics.N4_charged/(double)global_statistics.N_average/(double)global_variables.N_vertices4);
+
 fprintf(global_parameters.statistics_file," %lf %lf %lf %lf",
-	global_statistics.q33/(double)global_statistics.N_average,
-	global_statistics.q43/(double)global_statistics.N_average,
-	global_statistics.q34/(double)global_statistics.N_average,
-	global_statistics.q44/(double)global_statistics.N_average);
+	global_statistics.q33/(double)global_statistics.N3_charged/3.0,
+	global_statistics.q43/(double)global_statistics.N3_charged/3.0,
+	global_statistics.q34/(double)global_statistics.N4_charged/4.0,
+	global_statistics.q44/(double)global_statistics.N4_charged/4.0);
 
 
 fprintf(global_parameters.statistics_file,"\n");

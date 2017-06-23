@@ -206,8 +206,8 @@ struct statistics_struct
 	long int N3,N4; 
 	double xi, eta;   
 
-	int q33,q34,q43,q44;	//topological charge on the neighbors
-	
+	int q33,q34,q43,q44;		//topological charge on the neighbors
+	int N3_charged,N4_charged;	//number of vertices that have a topological charge 
 
     	double pos1x,pos1y,pos3x,pos3y;
     	double total_energy;
