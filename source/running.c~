@@ -1072,25 +1072,15 @@ fprintf(global_parameters.statistics_file,"%lf %lf",
 
 //Q3 and Q4 for the decimated lattice project
 
-if (global_variables.N_vertices4!=0)
-	fprintf(global_parameters.statistics_file," %lf",global_statistics.N4_charged/(double)global_statistics.N_average/(double)global_variables.N_vertices4);
-else 	fprintf(global_parameters.statistics_file," %lf",0.0);
-
-if (global_variables.N_vertices3!=0)
-	fprintf(global_parameters.statistics_file," %lf",global_statistics.N3_charged/(double)global_statistics.N_average/(double)global_variables.N_vertices3);
-else 	fprintf(global_parameters.statistics_file," %lf",0.0);
-
-if (global_variables.N_vertices4!=0)
 fprintf(global_parameters.statistics_file," %lf %lf",
+	global_statistics.N3_charged/(double)global_statistics.N_average/(double)global_variables.N_vertices3,
+	global_statistics.N4_charged/(double)global_statistics.N_average/(double)global_variables.N_vertices4);
+
+fprintf(global_parameters.statistics_file," %lf %lf %lf %lf",
+	global_statistics.q33/(double)global_statistics.N3_charged/3.0,
+	global_statistics.q43/(double)global_statistics.N3_charged/3.0,
 	global_statistics.q34/(double)global_statistics.N4_charged/4.0,
 	global_statistics.q44/(double)global_statistics.N4_charged/4.0);
-else 	fprintf(global_parameters.statistics_file," %lf %lf",0.0,0.0);
-
-if (global_variables.N_vertices3!=0)
-fprintf(global_parameters.statistics_file," %lf %lf",
-	global_statistics.q33/(double)global_statistics.N3_charged/3.0,
-	global_statistics.q43/(double)global_statistics.N3_charged/3.0);
-else 	fprintf(global_parameters.statistics_file," %lf %lf",0.0,0.0);
 
 
 fprintf(global_parameters.statistics_file,"\n");

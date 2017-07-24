@@ -1,0 +1,81 @@
+
+# Colloidal BD Code Initialization file
+
+# Square Ice Run
+# testing run
+
+name		running			def300
+name		movie			results/<running>.mvi
+name 		statistics	    	results/<running>_stat.txt
+name		savefile	    	parameters/restart_<running>.txt
+
+init 		type 		    	clean
+
+seed 		modifier		762436725
+
+timing		total_runtime       	1000000
+timing		movie_write_time    	1000
+timing		echotime		1000
+timing		statistics		100
+
+temperature	initial 		20
+temperature	N_setpoints		0
+# temperature	setpoint_time	    	5000
+# temperature	setpoint_temp	    	2000
+# temperature	setpoint_time		10000
+# temperature	setpoint_temp		3.0
+
+external	initial_fx		0.0
+external	initial_fy		0.0
+external	N_setpoints		0
+# external	setpoint_time	    	5000
+# external	setpoint_fx		0.0
+# external	setpoint_fy		0.0
+# external	setpoint_time	        10000
+# external	setpoint_fx		0.0
+# external	setpoint_fy		0.0
+
+running		dt 			0.001
+running 	diffusion_const		7000
+
+running 	magnetic_susceptibility 0.061
+running		magnetic_field		50.0
+
+box		SX			calculate_spin_ice
+box		SY 			calculate_spin_ice
+box		boundaryx		NO_PBC
+box 		boundaryy		NO_PBC
+
+pinning 	type		    	spin_ice_pin
+pinning 	lattice 		square
+pinning 	lattice_Nx		50
+pinning 	lattice_Ny		50
+pinning 	lattice_ax		29.0
+pinning 	lattice_ay		29.0
+pinning		xshift		    	0.00
+pinning		yshift		    	0.00
+pinning 	lx2		        5.0
+pinning 	ly2		       	5.5
+pinning 	substrate_height	3000
+pinning 	middle_height		0.87
+pinning 	middle_h_spread		0.0
+
+particle	radius			5.15
+particle	density			1.9
+particle 	type		    	spin_ice_particle
+particle 	lattice 	    	in_spin_ice
+particle 	starting		random
+particle 	defect_type		decimated_rand
+particle 	defect_number		300
+particle 	interaction		Magnetic
+particle 	multiplicator		1.0
+particle 	charge			1.0
+particle 	screening_a     	0.25
+particle 	short_cutoff 		5.0
+particle 	long_cutoff		60.0
+particle 	Verlet_cutoff   	60.0
+particle 	Verlet_rebuild		never
+
+
+
+
